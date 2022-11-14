@@ -1,6 +1,6 @@
-package structure.composite.before;
+package structure.composite.after;
 
-public class Item {
+public class Item implements Component{
 
     private String name;
     private int price;
@@ -10,10 +10,7 @@ public class Item {
         this.price = price;
     }
 
-    public String getName() {
-        return name;
-    }
-
+    @Override
     public int getPrice() {
         return price;
     }

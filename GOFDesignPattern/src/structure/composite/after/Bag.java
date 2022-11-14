@@ -1,17 +1,23 @@
-package structure.composite.before;
+package structure.composite.after;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class Bag {
+public class Bag implements Component{
 
-    private List<Item> items = new ArrayList<>();
+    private List<Component> components = new ArrayList<>();
 
-    public void add(Item item) {
-        items.add(item);
+    public void add(Component component) {
+        components.add(component);
     }
 
-    public List<Item> getItems() {
-        return items;
+    public List<Component> getComponents() {
+        return components;
+    }
+
+    @Override
+    public int getPrice(){
+        int sum = components.stream().mapToInt(Component::getPrice).sum();
+        return sum;
     }
 }
