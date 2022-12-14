@@ -1,4 +1,4 @@
-package change_of_interface.api_defalt_static_method;
+package stream;
 
 public class OnlineClass {
 
