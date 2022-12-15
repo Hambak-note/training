@@ -1,4 +1,4 @@
-package stream;
+package me.flower.java8to11.stream;
 
 import java.util.ArrayList;
 import java.util.List;

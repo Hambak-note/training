@@ -1,6 +1,6 @@
-package change_of_interface.defalt_static_method;
+package me.flower.java8to11.chang_of_interface.defalt_static_method;
 
-public class DefaultFoo implements Foo, Bar{
+public class DefaultFoo implements Foo, Bar {
 
     String name;
 

@@ -1,10 +1,16 @@
-package stream;
+package me.flower.java8to11.stream;
+
+import me.flower.java8to11.optional.Progress;
+
+import java.util.Optional;
 
 public class OnlineClass {
 
     private Integer id;
     private String title;
     private boolean closed;
+
+    public Progress progress;
 
     public OnlineClass(Integer id, String title, boolean closed) {
         this.id = id;
@@ -16,12 +22,22 @@ public class OnlineClass {
         return id;
     }
 
+    public Optional<Progress> getProgress() {
+        return Optional.ofNullable(progress);
+    }
+
     public void setId(Integer id) {
         this.id = id;
     }
 
     public String getTitle() {
         return title;
+    }
+
+    public void setProgress(Optional<Progress> progress) {
+        if(progress != null){
+            progress.ifPresent(p -> this.progress = p);
+        }
     }
 
     public void setTitle(String title) {

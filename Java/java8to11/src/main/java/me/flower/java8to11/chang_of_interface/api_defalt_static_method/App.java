@@ -1,4 +1,4 @@
-package change_of_interface.api_defalt_static_method;
+package me.flower.java8to11.chang_of_interface.api_defalt_static_method;
 
 import java.util.ArrayList;
 import java.util.Comparator;
