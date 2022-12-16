@@ -1,4 +1,4 @@
-package codemaniplulation.thejava;
+package codemanipulation.thejava.bytecode_manipulate;
 
 public class Moim {
 

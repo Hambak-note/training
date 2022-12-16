@@ -1,9 +1,10 @@
-package codemaniplulation.thejava;
+package codemanipulation.thejava.bytecode_manipulate;
 
 import org.junit.jupiter.api.Test;
-import static org.junit.jupiter.api.Assertions.assertFalse;
 
-public class MoimTest {
+import static org.junit.jupiter.api.Assertions.*;
+
+class MoimTest {
 
     @Test
     void isFull() {
@@ -12,5 +13,6 @@ public class MoimTest {
         moim.numberOfEnrollment = 10;
         assertFalse(moim.isEnrollmentFull());
     }
+
 
 }
