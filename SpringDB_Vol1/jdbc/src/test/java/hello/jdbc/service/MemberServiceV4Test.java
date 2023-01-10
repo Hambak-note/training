@@ -1,41 +1,64 @@
 package hello.jdbc.service;
 
 import hello.jdbc.domain.Member;
-import hello.jdbc.repository.MemberRepositoryV1;
-import hello.jdbc.repository.MemberRepositoryV2;
+import hello.jdbc.repository.*;
+import lombok.extern.slf4j.Slf4j;
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.springframework.jdbc.datasource.DriverManagerDataSource;
+import org.springframework.aop.support.AopUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.context.TestConfiguration;
+import org.springframework.context.annotation.Bean;
 
+import javax.sql.DataSource;
 import java.sql.SQLException;
 
-import static hello.jdbc.connection.ConnectionConst.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.junit.jupiter.api.Assertions.*;
+
 
 
 /**
- * 트랜잭션 - 커넥션 파라미터 전달 방식 동기화
+ * 예외 누수 문제 해결
+ * SQLException 제거
+ * MemberRepository 인터페이스 의존
  */
-
-class MemberServiceV2Test {
-
+@Slf4j
+@SpringBootTest
+class MemberServiceV4Test {
 
     public static final String MEMBER_A = "memberA";
     public static final String MEMBER_B = "memberB";
     public static final String MEMBER_EX = "ex";
 
-    private MemberRepositoryV2 memberRepository;
-    private MemberServiceV2 memberService;
+    @Autowired
+    private MemberRepository memberRepository;
+    @Autowired
+    private MemberServiceV4 memberService;
 
-    @BeforeEach
-    void before() {
-        DriverManagerDataSource dataSource = new DriverManagerDataSource(URL, USERNAME, PASSWORD);
-        memberRepository = new MemberRepositoryV2(dataSource);
-        memberService = new MemberServiceV2(dataSource, memberRepository);
+    @TestConfiguration
+    static class TestConfig{
+
+        private final DataSource dataSource;
+
+        public TestConfig(DataSource dataSource) {
+            this.dataSource = dataSource;
+        }
+
+        @Bean
+        MemberRepository memberRepository(){
+
+//            return new MemberRepositoryV4_2(dataSource);
+            return new MemberRepositoryV5(dataSource);
+        }
+
+        @Bean
+        MemberServiceV4 memberServiceV3_3(){
+            return new MemberServiceV4(memberRepository());
+        }
     }
 
     @AfterEach
@@ -43,7 +66,14 @@ class MemberServiceV2Test {
         memberRepository.delete(MEMBER_A);
         memberRepository.delete(MEMBER_B);
         memberRepository.delete(MEMBER_EX);
+    }
 
+    @Test
+    void AopCheck(){
+        log.info("memberService class={}", memberService.getClass());
+        log.info("memberRepository class={}", memberRepository.getClass());
+        Assertions.assertThat(AopUtils.isAopProxy(memberService)).isTrue();
+        Assertions.assertThat(AopUtils.isAopProxy(memberRepository)).isFalse();
     }
 
     @Test
@@ -89,4 +119,5 @@ class MemberServiceV2Test {
         assertThat(findMemberB.getMoney()).isEqualTo(10000);
 
     }
+
 }

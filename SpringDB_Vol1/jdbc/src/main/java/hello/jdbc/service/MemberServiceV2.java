@@ -36,13 +36,17 @@ public class MemberServiceV2 {
         }finally {
             if (con != null) {
                 try {
-                    con.setAutoCommit(true); //커넥션 풀 고려하여 오토 커밋을 true(기본값)으로 돌린다.
-                    con.close();
+                    release(con);
                 } catch (Exception e) {
                     log.info("error", e);
                 }
             }
         }
+    }
+
+    private static void release(Connection con) throws SQLException {
+        con.setAutoCommit(true); //커넥션 풀 고려하여 오토 커밋을 true(기본값)으로 돌린다.
+        con.close();
     }
 
     private void bizLogic(Connection con, String fromId, String toId, int money) throws SQLException {
